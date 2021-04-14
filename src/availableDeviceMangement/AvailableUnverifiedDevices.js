@@ -8,7 +8,6 @@ import {
   Button,
   Card,
   CardContent,
-  IconButton,
   List,
   ListItem,
   ListItemSecondaryAction,
@@ -16,6 +15,7 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
+import CreateDeviceDialog from "../mappedDevices/createDeviceDialog";
 
 const useStyles = makeStyles({
   root: {
@@ -49,13 +49,12 @@ const DeviceItem = (props) => {
           Map Device
         </Button>
       </ListItemSecondaryAction>
-      {isFormVisible && (
-        <MapDevicesForm
-          createDevices={createDevices}
-          cancel={() => toggleForm(false)}
-          deviceMacId={device.deviceMACId}
-        />
-      )}
+      <CreateDeviceDialog
+        deviceMacId={device.deviceMACId}
+        open={isFormVisible}
+        createDevices={createDevices}
+        setOpen={(value) => toggleForm(value)}
+      />
     </ListItem>
   );
 };
@@ -79,7 +78,7 @@ const AvailableUnverifiedDevicesUI = (props) => {
   const devices = Object.values(data);
 
   return (
-    <Card className={classes.root}>
+    <Card>
       <CardContent>
         <Typography gutterBottom variant="h5" component="h2">
           Unverified Device List

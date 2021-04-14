@@ -24,7 +24,7 @@ function MqttComponent(props) {
   };
 
   useEffect(() => {
-    mqttConnect("mqtt://127.0.0.1:1883");
+    mqttConnect("mqtt://127.0.0.1:1884");
   }, []);
 
   useEffect(() => {
@@ -58,6 +58,7 @@ function MqttComponent(props) {
       const { topic, qos = 0 } = subscription;
       client.subscribe(topic, { qos }, (error) => {
         if (error) {
+          console.error("subcription error", topic, error);
           return;
         }
         setIsSub({ [topic]: true });

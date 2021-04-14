@@ -4,28 +4,28 @@ import { useSnackbar } from "notistack";
 import DeviceDialog from './deviceDialog';
 import { validationSchema } from "./deviceForm";
 
-function UpdateDeviceDialog(props) {
+function CreateDeviceDialog(props) {
   const open = props.open;
   const setOpen = props.setOpen;
   const { enqueueSnackbar } = useSnackbar();
 
   const formik = useFormik({
     initialValues: {
-      name: "" || props.data.name,
-      metadataId: "" || props.data.metadataId,
-      isVerified: true || props.data.isVerified,
-      tolerableSleepDuration: 60 || Number(props.data.tolerableSleepDuration),
-      minVibrationAmplitude: 0 || Number(props.data.minVibrationAmplitude),
-      maxVibrationAmplitude: 10 || Number(props.data.maxVibrationAmplitude),
-      macId: "" || props.data.macId,
+      name: "",
+      metadataId: "",
+      isVerified: true,
+      tolerableSleepDuration: 60,
+      minVibrationAmplitude: 0,
+      maxVibrationAmplitude: 10,
+      macId: props.deviceMacId || "",
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
       props
-        .updateDevices(props.data.id, values)
+        .createDevices(values)
         .then((data) => {
           handleClose();
-          enqueueSnackbar("Sucessfully updated device config.", {
+          enqueueSnackbar("Sucessfully created device config.", {
             variant: "success",
           });
         })
@@ -42,4 +42,4 @@ function UpdateDeviceDialog(props) {
   return <DeviceDialog formik={formik} handleClose={handleClose} open={open} />;
 }
 
-export default UpdateDeviceDialog;
+export default CreateDeviceDialog;

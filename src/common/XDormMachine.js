@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import WashingMachineIcon from "../assets/icons/washingMachineIcon";
 import WashingMachineDryerIcon from "../assets/icons/washinMachineDryerIcon";
 
@@ -79,8 +79,28 @@ const machines = {
 };
 
 function XDormLaundryMachines(props) {
+  const { value } = props;
   const classes = useStyles();
   const [machineCollection, updateMachineCollection] = useState(machines);
+
+  useEffect(() => {
+    const washingMachineStates = Object.keys(machineCollection).reduce(
+      (acc, curr) => {
+        const currentMachine = machineCollection[curr];
+        acc[curr] = {
+          ...currentMachine,
+          selected: false,
+        };
+        if (props.value === curr) {
+          acc[curr].selected = !acc[curr].selected;
+        }
+        return acc;
+      },
+      {}
+    );
+    updateMachineCollection(washingMachineStates);
+  }, [value]);
+
   const updateMachineValue = (e, value) => {
     const washingMachineStates = Object.keys(machineCollection).reduce(
       (acc, curr) => {

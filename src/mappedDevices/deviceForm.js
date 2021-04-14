@@ -22,13 +22,12 @@ export const validationSchema = yup.object({
 });
 
 function DeviceForm(props) {
-  const { formik, isAddForm = true } = props;
+  const { formik } = props;
 
   return (
     <FormGroup row>
       <form onSubmit={formik.handleSubmit}>
         <TextField
-          fullWidth
           id="macId"
           name="macId"
           label="Device MAC ID"
@@ -38,7 +37,6 @@ function DeviceForm(props) {
           helperText={formik.touched.macId && formik.errors.macId}
         />
         <TextField
-          fullWidth
           id="name"
           name="name"
           label="Device Name"
@@ -56,7 +54,6 @@ function DeviceForm(props) {
           handleChange={(value) => formik.setFieldValue("metadataId", value)}
         />
         <TextField
-          fullWidth
           id="tolerableSleepDuration"
           type="number"
           name="tolerableSleepDuration"
@@ -77,7 +74,6 @@ function DeviceForm(props) {
           Minimum Vibration Amplitude
         </Typography>
         <Slider
-          fullWidth
           id="minVibrationAmplitude"
           name="minVibrationAmplitude"
           value={formik.values.minVibrationAmplitude}
@@ -89,7 +85,6 @@ function DeviceForm(props) {
           Maximum Vibration Amplitude
         </Typography>
         <Slider
-          fullWidth
           id="maxVibrationAmplitude"
           name="maxVibrationAmplitude"
           value={formik.values.maxVibrationAmplitude}
@@ -109,16 +104,6 @@ function DeviceForm(props) {
           }
           label="Is verified device?"
         />
-        {isAddForm && (
-          <Button color="primary" variant="contained" fullWidth type="submit">
-            Save
-          </Button>
-        )}
-        {isAddForm && (
-          <Button color="default" variant="contained" fullWidth type="submit">
-            Cancel
-          </Button>
-        )}
       </form>
     </FormGroup>
   );

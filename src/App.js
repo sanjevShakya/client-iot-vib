@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
-
-import MappedDevices from "./mappedDevices/deviceList";
-import * as deviceService from "./services/deviceService";
-import AvailableUnverifiedDevices from "./availableDeviceMangement/AvailableUnverifiedDevices";
+import DeviceManagement from "./pages/deviceManagement";
+import { Switch, Route, BrowserRouter as Router } from "react-router-dom";
+import DeviceOverview from "./pages/devicesOverview";
+import { SnackbarProvider } from "notistack";
 
 function Copyright() {
   return (
@@ -53,68 +53,44 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Album() {
   const classes = useStyles();
-  const [deviceCollection, updateDeviceCollection] = useState([]);
-  useEffect(() => {
-    fetchDevices();
-  }, []);
-  const fetchDevices = () => {
-    return deviceService
-      .fetchDevices()
-      .then((devices) => {
-        updateDeviceCollection(devices);
-      })
-      .finally(() => {});
-  };
-  const updateDevices = (deviceId, device) => {
-    console.log(device);
-    return deviceService
-      .updateDevices(deviceId, device)
-      .then((device) => {
-        fetchDevices();
-      })
-      .catch((err) => {})
-      .finally(() => {});
-  };
-  const createDevices = (device) => {
-    return deviceService
-      .createDevice(device)
-      .then(() => {
-        fetchDevices();
-      })
-      .catch((err) => {})
-      .finally(() => {});
-  };
 
   return (
-    <React.Fragment>
-      <CssBaseline />
-      <AppBar position="relative">
-        <Toolbar>
-          <Typography variant="h6" color="inherit" noWrap>
-            Laundry Notification Service
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <main>
-        <AvailableUnverifiedDevices createDevices={createDevices} />
-        <MappedDevices
-          devices={deviceCollection}
-          updateDevices={updateDevices}
-        />
-      </main>
-      {/* Footer */}
-      <footer className={classes.footer}>
-        <Typography
-          variant="subtitle1"
-          align="center"
-          color="textSecondary"
-          component="p"
-        >
-          Laundry Monitoring System
-        </Typography>
-        <Copyright />
-      </footer>
-      {/* End footer */}
-    </React.Fragment>
+    <Router>
+      <React.Fragment>
+        <SnackbarProvider maxSnack={3}>
+          <CssBaseline />
+          <AppBar position="relative">
+            <Toolbar>
+              <Typography variant="h6" color="inherit" noWrap>
+                Laundry Notification Service
+              </Typography>
+            </Toolbar>
+          </AppBar>
+          <main>
+            <Switch>
+              <Route path="/device-management">
+                <DeviceManagement />
+              </Route>
+              <Route path="/">
+                <DeviceOverview />
+              </Route>
+            </Switch>
+          </main>
+          {/* Footer */}
+          <footer className={classes.footer}>
+            <Typography
+              variant="subtitle1"
+              align="center"
+              color="textSecondary"
+              component="p"
+            >
+              Laundry Monitoring System
+            </Typography>
+            <Copyright />
+          </footer>
+          {/* End footer */}
+        </SnackbarProvider>
+      </React.Fragment>
+    </Router>
   );
 }

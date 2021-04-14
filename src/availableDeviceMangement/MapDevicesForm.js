@@ -1,3 +1,4 @@
+import { Card, CardContent } from "@material-ui/core";
 import { useFormik } from "formik";
 import React from "react";
 import DeviceForm, { validationSchema } from "../mappedDevices/deviceForm";
@@ -26,7 +27,13 @@ function MapDevicesFormUi(props) {
     },
   });
 
-  return <DeviceForm formik={formik} />;
+  return (
+    <Card>
+      <CardContent>
+        <DeviceForm formik={formik} />
+      </CardContent>
+    </Card>
+  );
 }
 
 export default MapDevicesFormUi;
