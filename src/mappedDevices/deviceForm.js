@@ -82,13 +82,24 @@ function DeviceForm(props) {
         />
 
         <Typography id="range-slider" gutterBottom>
-          Maximum Vibration Amplitude
+          5 Min Max Vibration Amplitude
         </Typography>
         <Slider
           id="maxVibrationAmplitude"
           name="maxVibrationAmplitude"
           value={formik.values.maxVibrationAmplitude}
           onChange={(e, v) => formik.setFieldValue("maxVibrationAmplitude", v)}
+          valueLabelDisplay="auto"
+        />
+
+        <Typography id="range-slider" gutterBottom>
+          10 Second Max Vibration Amplitude
+        </Typography>
+        <Slider
+          id="tenSecondMaxVibrationAmplitude"
+          name="tenSecondMaxVibrationAmplitude"
+          value={formik.values.tenSecondMaxVibrationAmplitude}
+          onChange={(e, v) => formik.setFieldValue("tenSecondMaxVibrationAmplitude", v)}
           valueLabelDisplay="auto"
         />
 

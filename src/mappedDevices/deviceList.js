@@ -25,6 +25,7 @@ function createData({
   deviceMetadata,
   minVibrationAmplitude,
   maxVibrationAmplitude,
+  tenSecondMaxVibrationAmplitude,
   data,
 }) {
   return {
@@ -34,6 +35,7 @@ function createData({
     isVerified,
     minVibrationAmplitude,
     maxVibrationAmplitude,
+    tenSecondMaxVibrationAmplitude,
     deviceType: deviceMetadata.type,
     deviceIcon: deviceMetadata.icon,
     deviceDisplayName: deviceMetadata.name,

@@ -1,7 +1,7 @@
 import React from "react";
 import { useFormik } from "formik";
 import { useSnackbar } from "notistack";
-import DeviceDialog from './deviceDialog';
+import DeviceDialog from "./deviceDialog";
 import { validationSchema } from "./deviceForm";
 
 function UpdateDeviceDialog(props) {
@@ -14,9 +14,12 @@ function UpdateDeviceDialog(props) {
       name: "" || props.data.name,
       metadataId: "" || props.data.metadataId,
       isVerified: true || props.data.isVerified,
-      tolerableSleepDuration: 60 || Number(props.data.tolerableSleepDuration),
-      minVibrationAmplitude: 0 || Number(props.data.minVibrationAmplitude),
-      maxVibrationAmplitude: 10 || Number(props.data.maxVibrationAmplitude),
+      tolerableSleepDuration: Number(props.data.tolerableSleepDuration),
+      minVibrationAmplitude: Number(props.data.minVibrationAmplitude),
+      maxVibrationAmplitude: Number(props.data.maxVibrationAmplitude),
+      tenSecondMaxVibrationAmplitude: Number(
+        props.data.tenSecondMaxVibrationAmplitude
+      ),
       macId: "" || props.data.macId,
     },
     validationSchema: validationSchema,
