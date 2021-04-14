@@ -19,3 +19,7 @@ export const fetchDeviceByMetadata = (deviceMetadataName) => {
 export const updateDevices = (id, device) => {
   return http.put(`${endpoint}/${id}`, { body: device });
 };
+
+export const deleteDevice = (device) => {
+  return http.remove(`/devices/${device.id}`);
+};

@@ -10,6 +10,8 @@ import Paper from "@material-ui/core/Paper";
 import { machines as devicesMetadata } from "../constants/machines";
 import { Button, Card, CardContent } from "@material-ui/core";
 import UpdateDeviceDialog from "./updateDeviceDialog";
+import ConfirmDialog from "../common/confirmDialog";
+import { useSnackbar } from "notistack";
 
 const useStyles = makeStyles({
   table: {
@@ -45,14 +47,38 @@ function createData({
 
 function DeviceList(props) {
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
   const [dialogs, updateDialogs] = useState({});
-  const { devices = [], updateDevices = (f) => f } = props;
+  const [confirmDialogs, updateConfirmDialogs] = useState({});
+
+  const { devices = [], updateDevices = (f) => f, handleDelete } = props;
 
   const setOpenDialog = (dialogKey, value) => {
     updateDialogs((prevState) => ({
       ...prevState,
       [dialogKey]: value,
     }));
+  };
+
+  const setConfirmDialogOpen = (dialogKey, value) => {
+    updateConfirmDialogs((prevState) => ({
+      ...prevState,
+      [dialogKey]: value,
+    }));
+  };
+
+  const onDelete = (device) => {
+    typeof handleDelete === "function" &&
+      handleDelete(device)
+        .then(() => {
+          setConfirmDialogOpen(device.macId, false);
+          enqueueSnackbar("Successfully deleted device mapping");
+        })
+        .catch((err) => {
+          enqueueSnackbar("Error occured while deleting device mapping", {
+            type: "error",
+          });
+        });
   };
 
   const devicesData = devices.map((device) =>
@@ -99,7 +125,20 @@ function DeviceList(props) {
                     >
                       Edit Device
                     </Button>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={() => setConfirmDialogOpen(row.macId, true)}
+                    >
+                      Delete Device
+                    </Button>
                   </TableCell>
+                  <ConfirmDialog
+                    message={`Do you want to delete mapping for "${row.name}" device?`}
+                    handleConfirm={() => onDelete(row)}
+                    open={confirmDialogs[row.macId]}
+                    setOpen={(value) => setConfirmDialogOpen(row.macId, value)}
+                  />
                   <UpdateDeviceDialog
                     data={row.data}
                     updateDevices={updateDevices}

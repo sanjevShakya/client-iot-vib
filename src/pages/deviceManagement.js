@@ -37,10 +37,20 @@ function DeviceManagement() {
       .finally(() => {});
   };
 
+  const handleDelete = (device) => {
+    return deviceService.deleteDevice(device).then(() => {
+      fetchDevices();
+    });
+  };
+
   return (
     <Card>
       <AvailableUnverifiedDevices createDevices={createDevices} />
-      <MappedDevices devices={deviceCollection} updateDevices={updateDevices} />
+      <MappedDevices
+        devices={deviceCollection}
+        updateDevices={updateDevices}
+        handleDelete={handleDelete}
+      />
       <DevicesChart devices={deviceCollection} />
     </Card>
   );
