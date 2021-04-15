@@ -52,7 +52,6 @@ function MqttComponent(props) {
           ...prevState,
           [topic]: receivedMessage
         }))
-        console.log(payload);
       });
     }
   }, [client]);
