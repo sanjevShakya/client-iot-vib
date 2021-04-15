@@ -37,6 +37,7 @@ const useStyles = makeStyles({
 const DeviceItem = (props) => {
   const { device, createDevices } = props;
   const [isFormVisible, toggleForm] = useState(false);
+  
   return (
     <ListItem>
       <ListItemText primary={device.deviceMACId} />
