@@ -50,7 +50,10 @@ function MqttComponent(props) {
         } catch (e) {
           receivedMessage = null;
         }
-        setPayload({ [topic]: receivedMessage });
+        setPayload(prevState => ({
+          ...prevState,
+          [topic]: receivedMessage
+        }))
       });
     }
   }, [client]);
@@ -63,7 +66,7 @@ function MqttComponent(props) {
           console.error("subcription error", topic, error);
           return;
         }
-        setIsSub({ [topic]: true });
+        setIsSub({ ...isSubed, [topic]: true });
       });
     }
   };
@@ -75,7 +78,7 @@ function MqttComponent(props) {
         if (error) {
           return;
         }
-        setIsSub({ [topic]: false });
+        setIsSub({ ...isSubed, [topic]: false });
       });
     }
   };
