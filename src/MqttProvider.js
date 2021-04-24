@@ -1,6 +1,7 @@
 import mqtt from "mqtt";
 import _get from "lodash.get";
 import React, { useEffect, useState } from "react";
+import config from "./config";
 
 export const MqttContext = React.createContext({
   actions: {
@@ -24,7 +25,8 @@ function MqttComponent(props) {
   };
 
   useEffect(() => {
-    mqttConnect("mqtt://127.0.0.1:1884");
+    const connectionUrl = `mqtt://${config.mqttHost}:${config.mqttPort}`;
+    mqttConnect(connectionUrl);
   }, []);
 
   useEffect(() => {
