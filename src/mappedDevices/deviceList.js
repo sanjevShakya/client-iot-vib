@@ -8,7 +8,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import { machines as devicesMetadata } from "../constants/machines";
-import { Button, Card, CardContent } from "@material-ui/core";
+import { Button, Card, CardContent, Typography } from "@material-ui/core";
 import UpdateDeviceDialog from "./updateDeviceDialog";
 import ConfirmDialog from "../common/confirmDialog";
 import { useSnackbar } from "notistack";
@@ -25,7 +25,7 @@ function createData({
   macId,
   isVerified,
   deviceMetadata,
-  minVibrationAmplitude,
+  offset,
   maxVibrationAmplitude,
   tenSecondMaxVibrationAmplitude,
   data,
@@ -35,7 +35,7 @@ function createData({
     name,
     macId,
     isVerified,
-    minVibrationAmplitude,
+    offset,
     maxVibrationAmplitude,
     tenSecondMaxVibrationAmplitude,
     deviceType: deviceMetadata.type,
@@ -51,7 +51,7 @@ function DeviceList(props) {
   const [dialogs, updateDialogs] = useState({});
   const [confirmDialogs, updateConfirmDialogs] = useState({});
 
-  const { devices = [], updateDevices = (f) => f, handleDelete } = props;
+  const { devices = [], updateDevices = (f) => f, handleDelete, handleRestart } = props;
 
   const setOpenDialog = (dialogKey, value) => {
     updateDialogs((prevState) => ({
@@ -81,6 +81,19 @@ function DeviceList(props) {
         });
   };
 
+  const onRestart = (device) => {
+    typeof handleRestart === "function" &&
+      handleRestart(device)
+        .then(() => {
+          enqueueSnackbar("Successfully restarted the device");
+        })
+        .catch((err) => {
+          enqueueSnackbar("Error occured while restarting the device", {
+            type: "error",
+          });
+        });
+  };
+
   const devicesData = devices.map((device) =>
     createData({
       ...device,
@@ -89,8 +102,11 @@ function DeviceList(props) {
     })
   );
   return (
-    <Card>
+    <Card style={{ marginBottom: 20 }}>
       <CardContent>
+        <Typography gutterBottom variant="h5" component="h5">
+          Mapped Device List
+        </Typography>
         <TableContainer component={Paper}>
           <Table className={classes.table} aria-label="simple table">
             <TableHead>
@@ -104,6 +120,11 @@ function DeviceList(props) {
               </TableRow>
             </TableHead>
             <TableBody>
+              {devicesData.length == 0 && (
+                <TableCell component="td" scope="row">
+                  <span style={{ color: "#333" }}>No devices mapped yet!</span>
+                </TableCell>
+              )}
               {devicesData.map((row) => (
                 <TableRow key={row.name}>
                   <TableCell component="th" scope="row">
@@ -112,9 +133,7 @@ function DeviceList(props) {
                   <TableCell align="right">
                     {row.maxVibrationAmplitude}
                   </TableCell>
-                  <TableCell align="right">
-                    {row.minVibrationAmplitude}
-                  </TableCell>
+                  <TableCell align="right">{row.offset}</TableCell>
                   <TableCell align="right">{row.deviceDisplayName}</TableCell>
                   <TableCell align="right">{row.deviceType}</TableCell>
                   <TableCell align="right">
@@ -123,14 +142,21 @@ function DeviceList(props) {
                       color="primary"
                       onClick={() => setOpenDialog(row.macId, true)}
                     >
-                      Edit Device
+                      Edit
                     </Button>
                     <Button
                       variant="contained"
                       color="secondary"
                       onClick={() => setConfirmDialogOpen(row.macId, true)}
                     >
-                      Delete Device
+                      Delete
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="blue"
+                      onClick={() => onRestart(row)}
+                    >
+                      Restart
                     </Button>
                   </TableCell>
                   <ConfirmDialog

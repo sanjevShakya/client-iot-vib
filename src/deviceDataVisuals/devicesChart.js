@@ -89,7 +89,7 @@ function DeviceChart(props) {
     <Card>
       <CardActionArea>
         <Typography>{device.name}</Typography>
-        <Typography>{device.minVibrationAmplitude}</Typography>
+        <Typography>{device.offset}</Typography>
         <Typography>{device.maxVibrationAmplitude}</Typography>
         <Typography>{device.macId}</Typography>
       </CardActionArea>

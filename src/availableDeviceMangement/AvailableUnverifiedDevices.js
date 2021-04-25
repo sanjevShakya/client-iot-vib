@@ -37,10 +37,16 @@ const useStyles = makeStyles({
 const DeviceItem = (props) => {
   const { device, createDevices } = props;
   const [isFormVisible, toggleForm] = useState(false);
-  
+
   return (
     <ListItem>
       <ListItemText primary={device.deviceMACId} />
+      <CreateDeviceDialog
+        deviceMacId={device.deviceMACId}
+        open={isFormVisible}
+        createDevices={createDevices}
+        setOpen={(value) => toggleForm(value)}
+      />
       <ListItemSecondaryAction>
         <Button
           variant="contained"
@@ -50,12 +56,6 @@ const DeviceItem = (props) => {
           Map Device
         </Button>
       </ListItemSecondaryAction>
-      <CreateDeviceDialog
-        deviceMacId={device.deviceMACId}
-        open={isFormVisible}
-        createDevices={createDevices}
-        setOpen={(value) => toggleForm(value)}
-      />
     </ListItem>
   );
 };
@@ -79,9 +79,9 @@ const AvailableUnverifiedDevicesUI = (props) => {
   const devices = Object.values(data);
 
   return (
-    <Card>
+    <Card style={{ marginBottom: "20px" }}>
       <CardContent>
-        <Typography gutterBottom variant="h5" component="h2">
+        <Typography gutterBottom variant="h5" component="h5">
           Unverified Device List
         </Typography>
         <List>

@@ -15,7 +15,7 @@ function CreateDeviceDialog(props) {
       metadataId: "",
       isVerified: true,
       tolerableSleepDuration: 60,
-      minVibrationAmplitude: 0,
+      offset: 0,
       maxVibrationAmplitude: 10,
       tenSecondMaxVibrationAmplitude: 8,
       macId: props.deviceMacId || "",

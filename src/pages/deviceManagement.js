@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import MappedDevices from "../mappedDevices/deviceList";
 import * as deviceService from "../services/deviceService";
 import AvailableUnverifiedDevices from "../availableDeviceMangement/AvailableUnverifiedDevices";
-import { Card } from "@material-ui/core";
+import { Card, CardContent } from "@material-ui/core";
 import DevicesChart from "../deviceDataVisuals/devicesChart";
 
 function DeviceManagement() {
@@ -37,6 +37,10 @@ function DeviceManagement() {
       .finally(() => {});
   };
 
+  const handleRestart = (device) => {
+    return deviceService.restartDevice(device);
+  };
+
   const handleDelete = (device) => {
     return deviceService.deleteDevice(device).then(() => {
       fetchDevices();
@@ -45,13 +49,16 @@ function DeviceManagement() {
 
   return (
     <Card>
-      <AvailableUnverifiedDevices createDevices={createDevices} />
-      <MappedDevices
-        devices={deviceCollection}
-        updateDevices={updateDevices}
-        handleDelete={handleDelete}
-      />
-      <DevicesChart devices={deviceCollection} />
+      <CardContent>
+        <AvailableUnverifiedDevices createDevices={createDevices} />
+        <MappedDevices
+          devices={deviceCollection}
+          updateDevices={updateDevices}
+          handleRestart={handleRestart}
+          handleDelete={handleDelete}
+        />
+        <DevicesChart devices={deviceCollection} />
+      </CardContent>
     </Card>
   );
 }

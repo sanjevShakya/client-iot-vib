@@ -6,6 +6,7 @@ import {
   TextField,
   Typography,
   FormGroup,
+  FormControl,
   Switch,
   FormControlLabel,
 } from "@material-ui/core";
@@ -30,6 +31,7 @@ function DeviceForm(props) {
         <TextField
           id="macId"
           name="macId"
+          fullWidth
           label="Device MAC ID"
           value={formik.values.macId}
           onChange={formik.handleChange}
@@ -39,23 +41,33 @@ function DeviceForm(props) {
         <TextField
           id="name"
           name="name"
+          fullWidth
           label="Device Name"
           value={formik.values.name}
           onChange={formik.handleChange}
           error={formik.touched.name && Boolean(formik.errors.name)}
           helperText={formik.touched.name && formik.errors.name}
         />
-        <Typography id="washine-machine-selector" gutterBottom>
-          Washing Machines
-        </Typography>
-        <XDormLaundryMachines
-          name="washing-machine-selector"
-          value={formik.values.metadataId}
-          handleChange={(value) => formik.setFieldValue("metadataId", value)}
-        />
+        <div style={{ padding: "20px 0" }}>
+          <Typography
+            id="washine-machine-selector"
+            variant="caption"
+            display="block"
+            gutterBottom
+          >
+            Washing Machines
+          </Typography>
+          <XDormLaundryMachines
+            name="washing-machine-selector"
+            value={formik.values.metadataId}
+            handleChange={(value) => formik.setFieldValue("metadataId", value)}
+          />
+        </div>
+
         <TextField
           id="tolerableSleepDuration"
           type="number"
+          fullWidth
           name="tolerableSleepDuration"
           label="Tolerable Sleep Duration (Seconds)"
           value={formik.values.tolerableSleepDuration}
@@ -71,13 +83,16 @@ function DeviceForm(props) {
         />
 
         <Typography id="range-slider" gutterBottom>
-          Minimum Vibration Amplitude
+          Offset
         </Typography>
         <Slider
-          id="minVibrationAmplitude"
-          name="minVibrationAmplitude"
-          value={formik.values.minVibrationAmplitude}
-          onChange={(e, v) => formik.setFieldValue("minVibrationAmplitude", v)}
+          id="offset"
+          name="offset"
+          min={0}
+          max={100}
+          step={0.1}
+          value={formik.values.offset}
+          onChange={(e, v) => formik.setFieldValue("offset", v)}
           valueLabelDisplay="auto"
         />
 
@@ -85,6 +100,9 @@ function DeviceForm(props) {
           5 Min Max Vibration Amplitude
         </Typography>
         <Slider
+          min={0}
+          max={100}
+          step={0.1}
           id="maxVibrationAmplitude"
           name="maxVibrationAmplitude"
           value={formik.values.maxVibrationAmplitude}
@@ -96,10 +114,15 @@ function DeviceForm(props) {
           10 Second Max Vibration Amplitude
         </Typography>
         <Slider
+          min={0}
+          max={100}
+          step={0.1}
           id="tenSecondMaxVibrationAmplitude"
           name="tenSecondMaxVibrationAmplitude"
           value={formik.values.tenSecondMaxVibrationAmplitude}
-          onChange={(e, v) => formik.setFieldValue("tenSecondMaxVibrationAmplitude", v)}
+          onChange={(e, v) =>
+            formik.setFieldValue("tenSecondMaxVibrationAmplitude", v)
+          }
           valueLabelDisplay="auto"
         />
 

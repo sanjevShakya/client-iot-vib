@@ -23,3 +23,7 @@ export const updateDevices = (id, device) => {
 export const deleteDevice = (device) => {
   return http.remove(`/devices/${device.id}`);
 };
+
+export const restartDevice = (device) => {
+  return http.post(`/devices/restart/${device.id}`, { body: device });
+};

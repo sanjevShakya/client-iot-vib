@@ -15,7 +15,7 @@ function UpdateDeviceDialog(props) {
       metadataId: "" || props.data.metadataId,
       isVerified: true || props.data.isVerified,
       tolerableSleepDuration: Number(props.data.tolerableSleepDuration),
-      minVibrationAmplitude: Number(props.data.minVibrationAmplitude),
+      offset: Number(props.data.offset),
       maxVibrationAmplitude: Number(props.data.maxVibrationAmplitude),
       tenSecondMaxVibrationAmplitude: Number(
         props.data.tenSecondMaxVibrationAmplitude
