@@ -2,8 +2,50 @@ import React, { useState, useEffect } from "react";
 
 import * as deviceService from "../services/deviceService";
 import { dormXMachines } from "../constants/machines";
-import { Card, CardContent, Grid } from "@material-ui/core";
-import MqttProvider, { MqttContext } from "../MqttProvider";
+import WashingMachineIcon from "../assets/icons/washingMachineIcon";
+import WashingMachineDryerIcon from "../assets/icons/washinMachineDryerIcon";
+import { Card, CardContent, Chip, Grid, Typography } from "@material-ui/core";
+import { red, green, yellow, grey } from "@material-ui/core/colors";
+import { MqttContext } from "../MqttProvider";
+
+const deviceStates = {
+  unavailable: {
+    name: "unavailable",
+    displayName: "Unavailable",
+    color: red[800],
+  },
+  available: {
+    name: "available",
+    displayName: "Available",
+    color: green[800],
+  },
+  silent: {
+    name: "silent",
+    displayName: "Unavailable",
+    color: yellow[800],
+  },
+  unknown: {
+    name: "unknown",
+    displayName: "Unknown",
+    color: grey[800],
+  },
+};
+
+const deviceOn = "ON";
+const deviceOff = "TRUEOFF";
+const deviceSilent = "OFF";
+
+const resolveDeviceState = (deviceState) => {
+  if (deviceState == deviceOn) {
+    return deviceStates.unavailable;
+  } else if (deviceState == deviceOff) {
+    return deviceStates.available;
+  } else if (deviceState == deviceSilent) {
+    return deviceStates.silent;
+  } else {
+    return deviceStates.unknown;
+  }
+};
 
 function DeviceMqtt(props) {
   return (
@@ -21,11 +63,11 @@ function DeviceMqtt(props) {
 }
 
 function DevicesOverview() {
-  const [deviceCollection, updateDeviceCollection] = useState([]);
+  const [deviceCollection, updateDeviceCollection] = useState(null);
 
   useEffect(() => {
     fetchDevices();
-  }, []);
+  }, [deviceCollection]);
 
   const fetchDevices = () => {
     return deviceService
@@ -42,7 +84,7 @@ function DevicesOverview() {
         <CardContent>
           <Grid container>
             {dormXMachines.map((machine) => (
-              <Grid item xs={12} md={3}>
+              <Grid key={machine.name} item xs={12} md={3}>
                 <DeviceMqtt key={machine.name} deviceMetadata={machine} />
               </Grid>
             ))}
@@ -53,13 +95,11 @@ function DevicesOverview() {
   );
 }
 
-function DeviceStatus(props) {
-  return <div>Device Status</div>;
-}
-
 function Device(props) {
   const { deviceMetadata, mqttActions, mqttData, isClientAvailable } = props;
-  const [device, updateDevice] = useState({});
+  const [device, updateDevice] = useState(null);
+  const [deviceState, updateDeviceState] = useState(null);
+  const [isDeviceAvailable, updateDeviceAvailable] = useState(false);
   const [latestData, updateLatestData] = useState({});
   const [topic, setTopic] = useState("");
   const [isMapped, updateIsMapped] = useState(false);
@@ -67,23 +107,24 @@ function Device(props) {
   const data = mqttActions.getDataByTopic(topic);
 
   useEffect(() => {
+    fetchDevices();
+  }, []);
+
+  useEffect(() => {
+    // console.log(device);
     if (data) {
       updateLatestData({
         ...data,
         arrivalTime: new Date().toLocaleTimeString(),
       });
+      console.log(data);
+      updateDeviceState(resolveDeviceState(data.deviceState));
     }
   }, [data]);
 
   useEffect(() => {
-    if (topic && isMapped) {
-      mqttActions.subscribe({ topic: topic });
-    }
-  }, [isClientAvailable, topic, isMapped]);
-
-  useEffect(() => {
-    fetchDevices();
-  }, []);
+    mqttActions.subscribe({ topic: topic });
+  }, [topic]);
 
   const fetchDevices = () => {
     return deviceService
@@ -102,18 +143,34 @@ function Device(props) {
       .finally(() => {});
   };
 
+  if (!isMapped) {
+    return (
+      <Card>
+        <CardContent>
+          <Typography variant="h6">{deviceMetadata.displayName}</Typography>
+          <Typography variant="caption">Device is not Mapped</Typography>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card>
       <CardContent>
-        <h3>{deviceMetadata.displayName}</h3>
-        <span>{isMapped ? "Mapped" : "Not Mapped"}</span>
-        {latestData && latestData.arrivalTime && (
-          <p>
-            <span>Updated at: </span>
-            <span>{latestData.arrivalTime}</span>
-          </p>
+        <Typography variant="h6">{deviceMetadata.displayName}</Typography>
+        <Typography variant="caption">Device Registered</Typography>
+        {deviceState && (
+          <Chip
+            label={deviceState.displayName}
+            style={{ background: deviceState.color, color: "#fff" }}
+          />
         )}
-        <DeviceStatus device={device} />
+        {latestData && latestData.arrivalTime && (
+          <div>
+            <Typography variant="caption">Updated at:</Typography>
+            <Typography>{latestData.arrivalTime}</Typography>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

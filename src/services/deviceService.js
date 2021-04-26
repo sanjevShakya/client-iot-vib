@@ -27,3 +27,7 @@ export const deleteDevice = (device) => {
 export const restartDevice = (device) => {
   return http.post(`/devices/restart/${device.id}`, { body: device });
 };
+
+export const calibrateAccelerometer = (device) => {
+  return http.post(`/devices/calibrate/${device.id}`, { body: device });
+};
