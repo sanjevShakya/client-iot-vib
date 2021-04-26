@@ -51,7 +51,12 @@ function DeviceList(props) {
   const [dialogs, updateDialogs] = useState({});
   const [confirmDialogs, updateConfirmDialogs] = useState({});
 
-  const { devices = [], updateDevices = (f) => f, handleDelete, handleRestart } = props;
+  const {
+    devices = [],
+    updateDevices = (f) => f,
+    handleDelete,
+    handleRestart,
+  } = props;
 
   const setOpenDialog = (dialogKey, value) => {
     updateDialogs((prevState) => ({
@@ -85,6 +90,7 @@ function DeviceList(props) {
     typeof handleRestart === "function" &&
       handleRestart(device)
         .then(() => {
+          setConfirmDialogOpen(device, false);
           enqueueSnackbar("Successfully restarted the device");
         })
         .catch((err) => {
@@ -120,11 +126,15 @@ function DeviceList(props) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {devicesData.length == 0 && (
-                <TableCell component="td" scope="row">
-                  <span style={{ color: "#333" }}>No devices mapped yet!</span>
-                </TableCell>
-              )}
+              <TableRow>
+                {devicesData.length == 0 && (
+                  <TableCell component="td" scope="row">
+                    <span style={{ color: "#333" }}>
+                      No devices mapped yet!
+                    </span>
+                  </TableCell>
+                )}
+              </TableRow>
               {devicesData.map((row) => (
                 <TableRow key={row.name}>
                   <TableCell component="th" scope="row">
@@ -153,7 +163,7 @@ function DeviceList(props) {
                     </Button>
                     <Button
                       variant="contained"
-                      color="blue"
+                      color="default"
                       onClick={() => onRestart(row)}
                     >
                       Restart
@@ -162,13 +172,13 @@ function DeviceList(props) {
                   <ConfirmDialog
                     message={`Do you want to delete mapping for "${row.name}" device?`}
                     handleConfirm={() => onDelete(row)}
-                    open={confirmDialogs[row.macId]}
+                    open={confirmDialogs[row.macId] || false}
                     setOpen={(value) => setConfirmDialogOpen(row.macId, value)}
                   />
                   <UpdateDeviceDialog
                     data={row.data}
                     updateDevices={updateDevices}
-                    open={dialogs[row.macId]}
+                    open={dialogs[row.macId] || false}
                     setOpen={(value) => setOpenDialog(row.macId, value)}
                   />
                 </TableRow>

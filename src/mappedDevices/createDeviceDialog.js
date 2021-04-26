@@ -1,7 +1,7 @@
 import React from "react";
 import { useFormik } from "formik";
 import { useSnackbar } from "notistack";
-import DeviceDialog from './deviceDialog';
+import DeviceDialog from "./deviceDialog";
 import { validationSchema } from "./deviceForm";
 
 function CreateDeviceDialog(props) {
