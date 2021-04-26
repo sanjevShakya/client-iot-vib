@@ -1,2 +1,2 @@
 #!/bin/bash
-serve -s build -p 8000
+/usr/bin/python3 -m http.server --directory /home/pi/lnsIot/client-iot-vib/build
