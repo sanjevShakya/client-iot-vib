@@ -4,7 +4,14 @@ import * as deviceService from "../services/deviceService";
 import { dormXMachines } from "../constants/machines";
 import WashingMachineIcon from "../assets/icons/washingMachineIcon";
 import WashingMachineDryerIcon from "../assets/icons/washinMachineDryerIcon";
-import { Card, CardContent, Chip, Grid, Typography } from "@material-ui/core";
+import {
+  Button,
+  Card,
+  CardContent,
+  Chip,
+  Grid,
+  Typography,
+} from "@material-ui/core";
 import { red, green, yellow, grey } from "@material-ui/core/colors";
 import { MqttContext } from "../MqttProvider";
 
@@ -67,7 +74,7 @@ function DevicesOverview() {
 
   useEffect(() => {
     fetchDevices();
-  }, [deviceCollection]);
+  }, []);
 
   const fetchDevices = () => {
     return deviceService
@@ -82,7 +89,7 @@ function DevicesOverview() {
     <div>
       <Card>
         <CardContent>
-          <Grid container>
+          <Grid container spacing={2}>
             {dormXMachines.map((machine) => (
               <Grid key={machine.name} item xs={12} md={3}>
                 <DeviceMqtt key={machine.name} deviceMetadata={machine} />
@@ -157,20 +164,24 @@ function Device(props) {
   return (
     <Card>
       <CardContent>
-        <Typography variant="h6">{deviceMetadata.displayName}</Typography>
-        <Typography variant="caption">Device Registered</Typography>
-        {deviceState && (
-          <Chip
-            label={deviceState.displayName}
-            style={{ background: deviceState.color, color: "#fff" }}
-          />
-        )}
-        {latestData && latestData.arrivalTime && (
-          <div>
-            <Typography variant="caption">Updated at:</Typography>
-            <Typography>{latestData.arrivalTime}</Typography>
-          </div>
-        )}
+        <Grid container>
+          <Grid item xs={12}>
+            <Typography variant="h6">{deviceMetadata.displayName}</Typography>
+            <Typography variant="caption">Device Registered</Typography>
+            {deviceState && (
+              <Chip
+                label={deviceState.displayName}
+                style={{ background: deviceState.color, color: "#fff" }}
+              />
+            )}
+            {latestData && latestData.arrivalTime && (
+              <div>
+                <Typography variant="caption">Updated at:</Typography>
+                <Typography>{latestData.arrivalTime}</Typography>
+              </div>
+            )}
+          </Grid>
+        </Grid>
       </CardContent>
     </Card>
   );
