@@ -168,12 +168,14 @@ function Device(props) {
           <Grid item xs={12}>
             <Typography variant="h6">{deviceMetadata.displayName}</Typography>
             <Typography variant="caption">Device Registered</Typography>
-            {deviceState && (
-              <Chip
-                label={deviceState.displayName}
-                style={{ background: deviceState.color, color: "#fff" }}
-              />
-            )}
+            <div>
+              {deviceState && (
+                <Chip
+                  label={deviceState.displayName}
+                  style={{ background: deviceState.color, color: "#fff" }}
+                />
+              )}
+            </div>
             {latestData && latestData.arrivalTime && (
               <div>
                 <Typography variant="caption">Updated at:</Typography>

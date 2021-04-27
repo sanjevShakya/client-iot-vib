@@ -68,7 +68,7 @@ function getDeviceTimeData(deviceData) {
     ax: [time, deviceData.ax],
     ay: [time, deviceData.ay],
     az: [time, deviceData.az],
-    mean: [time, deviceData.mean],
+    mean: [time, deviceData.comparedMean],
   };
 }
 
@@ -149,8 +149,8 @@ function DeviceChart(props) {
             <Typography variant="overline">{device.macId}</Typography>
             <Typography variant="caption">Offset:</Typography>
             <Typography>{device.offset}</Typography>
-            <Typography variant="caption">Max Amplitude:</Typography>
-            <Typography gutterBottom>{device.maxVibrationAmplitude}</Typography>
+            <Typography variant="caption">Ten Second Max Amplitude:</Typography>
+            <Typography gutterBottom>{device.tenSecondMaxVibrationAmplitude}</Typography>
             <Grid container spacing={2}>
               <Grid item xs={12} md={6}>
                 <Button
