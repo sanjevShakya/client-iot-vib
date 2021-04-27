@@ -98,7 +98,7 @@ function DeviceChart(props) {
       }
       updateMeanDeviceTimeData(deviceMeanTimeData.concat([mean]));
       updateMaxVibrationTimeData(
-        maxVibrationTimeData.concat([Number(device.maxVibrationAmplitude || 0)])
+        maxVibrationTimeData.concat([Number(device.tenSecondMaxVibrationAmplitude || 0)])
       );
       updateAxTimeData(deviceAxTimeData.concat([ax]));
       updateAyTimeData(deviceAyTimeData.concat([ay]));
